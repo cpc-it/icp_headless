@@ -9,7 +9,7 @@ import '../styles/main.scss';
 import ThemeStyles from '../components/ThemeStyles/ThemeStyles';
 
 const GA_MEASUREMENT_ID =
-  process.env.NEXT_PUBLIC_GA_ID || 'G-BRV0397C54';
+  process.env.NEXT_PUBLIC_GA_ID?.trim() || 'G-BRV0397C54';
 
 export default function MyApp({ Component, pageProps }) {
   const router = useRouter();
@@ -22,8 +22,6 @@ export default function MyApp({ Component, pageProps }) {
         page_path: url,
       });
     };
-
-    trackPageView(window.location.pathname);
 
     const handleRouteChange = (url) => trackPageView(url);
 
@@ -50,9 +48,10 @@ export default function MyApp({ Component, pageProps }) {
                 function gtag(){dataLayer.push(arguments);}
                 window.gtag = gtag;
                 gtag('js', new Date());
-                gtag('config', '${GA_MEASUREMENT_ID}', {
-                  send_page_view: false
-                });
+                gtag('config', ${JSON.stringify(GA_MEASUREMENT_ID).replace(
+                  /</g,
+                  '\\u003c'
+                )});
               `,
             }}
           />

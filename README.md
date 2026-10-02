@@ -39,7 +39,8 @@ Current site behavior visible in code:
 - `/posts` fetches 9 posts per page.
 - `/projects` fetches 5 projects per page.
 - `/search` queries `contentNodes` with a search string and is marked `noindex`.
-- Google Analytics is loaded in [`pages/_app.js`](/Users/bchenowe/Sites/icp_headless/pages/_app.js) using `NEXT_PUBLIC_GA_ID`, with a hardcoded fallback measurement ID if the env var is absent.
+- Google Analytics 4 is loaded in [`pages/_app.js`](/Users/bchenowe/Sites/icp_headless/pages/_app.js) using `NEXT_PUBLIC_GA_ID`, with `G-BRV0397C54` as the existing fallback.
+- Google Search Console HTML-tag verification is rendered by [`pages/_document.js`](/Users/bchenowe/Sites/icp_headless/pages/_document.js) when `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` is configured.
 - Canonical URLs and sitemap URLs are derived from `NEXT_PUBLIC_SITE_URL`, `SITE_URL`, Vercel env vars, or `NEXT_PUBLIC_WORDPRESS_URL`.
 
 ## Prerequisites
@@ -70,7 +71,7 @@ npm install
 cp .env.local.example .env.local
 ```
 
-There is no `.env.local.example` in this repo today. Create `.env.local` manually instead.
+Copy `.env.local.example` to `.env.local` and replace its example values.
 
 3. Add the required environment variables listed below.
 
@@ -92,31 +93,37 @@ WordPress setup notes verified from the repo:
 ```bash
 npm run dev
 ```
+
 Runs the local Faust development server.
 
 ```bash
 npm run lint
 ```
+
 Runs `faust lint`. Verified in this workspace: passes with no ESLint errors.
 
 ```bash
 npm run format
 ```
+
 Formats JS, JSX, Markdown, CSS, and SCSS files with Prettier.
 
 ```bash
 npm run format:check
 ```
+
 Checks formatting without writing changes.
 
 ```bash
 npm run clean
 ```
+
 Deletes `.next` and `node_modules`.
 
 ```bash
 npm run generate
 ```
+
 Runs `faust generatePossibleTypes` to regenerate [`possibleTypes.json`](/Users/bchenowe/Sites/icp_headless/possibleTypes.json).
 
 ## Build, Test, and Deploy Commands
@@ -124,6 +131,7 @@ Runs `faust generatePossibleTypes` to regenerate [`possibleTypes.json`](/Users/b
 ```bash
 npm run build
 ```
+
 Runs `faust build`.
 
 Status in this workspace:
@@ -135,11 +143,13 @@ Status in this workspace:
 ```bash
 npm start
 ```
+
 Runs `faust start` for a production build.
 
 ```bash
 npm run wpe-build
 ```
+
 Alias for `faust build`.
 
 Testing:
@@ -170,7 +180,9 @@ Present in the workspace `.env.local` and likely required by Faust integration, 
 Optional frontend/runtime variables:
 
 - `NEXT_PUBLIC_GA_ID`
-  - Optional. If omitted, [`pages/_app.js`](/Users/bchenowe/Sites/icp_headless/pages/_app.js) falls back to `G-BRV0397C54`.
+  - Optional. Set this to the GA4 web stream measurement ID (format `G-XXXXXXXXXX`) from Google Analytics. If unset, the app uses the existing fallback measurement ID `G-BRV0397C54`.
+- `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION`
+  - Optional. Set this to the token in the HTML tag method shown by Google Search Console. The app renders the required `google-site-verification` meta tag when it is set.
 - `NEXT_PUBLIC_SITE_URL`
   - Recommended for production. Preferred source for canonical URLs and sitemap URLs.
 - `SITE_URL`
@@ -181,6 +193,15 @@ Optional frontend/runtime variables:
   - Optional deployment-provided fallback.
 - `NEXT_PUBLIC_WORDPRESS_URL`
   - Used for WordPress/GraphQL connectivity only. Do not rely on this for canonicals on a custom frontend domain, or pages may emit canonicals to the backend WordPress host instead of the public site.
+
+### Google Analytics 4 and Search Console
+
+1. Create a GA4 property and web data stream for the public frontend URL. Copy its measurement ID into `NEXT_PUBLIC_GA_ID`.
+2. Add the production frontend as a property in Google Search Console. Either verify ownership with a DNS record (managed outside this app) or choose the HTML tag method and set the tag's content token as `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION`.
+3. Set these variables in the production deployment environment and rebuild/redeploy. They are public site configuration, not secrets.
+4. After Search Console verifies the property, submit `https://<your-public-site>/sitemap.xml` under **Sitemaps**. The app already serves this sitemap and references it in `robots.txt`.
+
+Property creation, ownership verification, and sitemap submission must also be completed in the corresponding Google accounts; configuring these environment variables only makes the deployed site ready for those steps.
 
 ### Alt-text backfill script
 
