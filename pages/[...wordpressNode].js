@@ -1,16 +1,7 @@
-import { getWordPressProps, WordPressTemplate } from '@faustwp/core';
+import redirectToHome from '@utilities/redirectToHome';
 
-export default function Page(props) {
-  return <WordPressTemplate {...props} />;
+export default function WordPressRoute() {
+  return null;
 }
 
-export function getStaticProps(ctx) {
-  return getWordPressProps({ ctx });
-}
-
-export async function getStaticPaths() {
-  return {
-    paths: [],
-    fallback: 'blocking',
-  };
-}
+export const getServerSideProps = redirectToHome;

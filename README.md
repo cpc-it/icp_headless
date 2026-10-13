@@ -1,27 +1,31 @@
 # ICP Headless
 
-This repository is a headless WordPress frontend built with Next.js and Faust.js. It renders content from a WordPress site over WPGraphQL, including:
+The public site is now a single landing page linking to the existing
+[@insidecalpoly Instagram account](https://www.instagram.com/insidecalpoly/).
+Legacy post, project, search, preview, and WordPress content URLs permanently
+redirect to the homepage. The sitemap lists only the homepage.
 
-- the home page (`/`) with the latest posts
-- paginated post and project archives (`/posts`, `/projects`)
-- dynamic WordPress content routes through Faust (`/[...wordpressNode]`)
-- client-side search at `/search`
-- a Faust preview page at `/preview`
-- server-rendered `robots.txt` and `sitemap.xml`
+This change affects the frontend only. It does not delete content, media, or
+backups from WordPress, and it does not modify the exported WordPress XML. Keep
+the XML export and a separate copy of uploaded media until the backup has been
+verified and the WordPress site is ready to be decommissioned.
 
-It also includes two optional AI alt-text utilities:
+## Legacy WordPress implementation
+
+The legacy WordPress tooling also includes two optional AI alt-text utilities:
 
 - a Node.js backfill script for existing WordPress media items
 - a minimal WordPress plugin that generates alt text for new uploads
 
-## Stack and Architecture
+## Retained Legacy Stack and Architecture
 
 - Next.js 14 using the Pages Router
 - React 18
 - Faust.js (`@faustwp/core` and `@faustwp/cli`) for WordPress integration
 - Apollo Client for WPGraphQL queries and relay-style pagination caching
 - Sass/SCSS modules plus global SCSS
-- WordPress as the content system, with Faust and WPGraphQL expected on the backend
+- Faust and WPGraphQL were used by the previous WordPress-backed site; the
+  homepage and redirects no longer query that backend
 
 Runtime structure:
 
@@ -33,17 +37,30 @@ Runtime structure:
 - [`components`](/Users/bchenowe/Sites/icp_headless/components) contains presentational components and GraphQL fragments used by templates.
 - [`utilities`](/Users/bchenowe/Sites/icp_headless/utilities) contains SEO and site URL helpers.
 
-Current site behavior visible in code:
+Current public behavior:
 
-- Home page fetches and renders the latest 8 posts.
-- `/posts` fetches 9 posts per page.
-- `/projects` fetches 5 projects per page.
-- `/search` queries `contentNodes` with a search string and is marked `noindex`.
+- The homepage is standalone and reads its Instagram destination from
+  `app.config.js`.
+- `/posts`, `/projects`, `/search`, `/preview`, and legacy WordPress URLs return
+  permanent redirects to `/`.
+- `sitemap.xml` contains only `/`; `robots.txt` points crawlers to that sitemap.
 - Google Analytics 4 is loaded in [`pages/_app.js`](/Users/bchenowe/Sites/icp_headless/pages/_app.js) using `NEXT_PUBLIC_GA_ID`, with `G-BRV0397C54` as the existing fallback.
 - Google Search Console HTML-tag verification is rendered by [`pages/_document.js`](/Users/bchenowe/Sites/icp_headless/pages/_document.js) when `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` is configured.
-- Canonical URLs and sitemap URLs are derived from `NEXT_PUBLIC_SITE_URL`, `SITE_URL`, Vercel env vars, or `NEXT_PUBLIC_WORDPRESS_URL`.
 
-## Prerequisites
+## Before decommissioning WordPress
+
+1. Verify the XML export can be imported into a test WordPress site. If it only
+   contains media attachment records, separately preserve and verify the files
+   in `wp-content/uploads`.
+2. Deploy this frontend and check the homepage, Instagram link, sitemap, and
+   redirects for representative old post and project URLs.
+3. Only after verifying the backup, remove or shut down the WordPress site.
+   Keep the public domain pointed at this frontend deployment.
+
+## Legacy Development Prerequisites
+
+These prerequisites apply only when developing or restoring the retained
+WordPress integration; they are not needed by the homepage itself.
 
 - Node.js and npm
 - A WordPress site with:

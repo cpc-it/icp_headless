@@ -1,11 +1,7 @@
-import SEO from '@components/SEO';
-import { WordPressTemplate } from '@faustwp/core';
+import redirectToHome from '@utilities/redirectToHome';
 
-export default function Preview(props) {
-  return (
-    <>
-      <SEO title="Preview" noIndex={true} noFollow={true} url="/preview" />
-      <WordPressTemplate {...props} />
-    </>
-  );
+export default function Preview() {
+  return null;
 }
+
+export const getServerSideProps = redirectToHome;

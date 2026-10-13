@@ -10,8 +10,6 @@ export async function getServerSideProps({ req, res }) {
   res.setHeader('Content-Type', 'text/plain; charset=utf-8');
   res.write(`User-agent: *
 Allow: /
-Disallow: /preview
-Disallow: /search
 
 Sitemap: ${toAbsoluteUrl('/sitemap.xml', siteUrl)}
 `);
@@ -21,4 +19,3 @@ Sitemap: ${toAbsoluteUrl('/sitemap.xml', siteUrl)}
     props: {},
   };
 }
-

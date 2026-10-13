@@ -1,57 +1,61 @@
-@import 'styles/Variables';
-
-.home {
-  section {
-    margin-bottom: 8rem;
-    margin-top: 8rem;
-  }
-}
-
-.hidden {
-  position: absolute !important;
-  width: 1px !important;
-  height: 1px !important;
-  padding: 0 !important;
-  margin: -1px !important;
-  overflow: hidden !important;
-  clip: rect(0 0 0 0) !important;
-  clip-path: inset(50%) !important;
-  border: 0 !important;
-  white-space: nowrap !important;
-}
-
-.heading {
-  font-size: 4.8rem;
+.page {
+  align-items: center;
+  background: #f7f6f1;
+  color: #183b32;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 3.2rem 2.4rem;
   text-align: center;
-  margin-bottom: 1rem;
-  line-height: 1.2;
+}
+
+.content {
+  max-width: 64rem;
+}
+
+.eyebrow {
+  color: #43685d;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  margin: 0 0 1.6rem;
+  text-transform: uppercase;
+}
+
+.content h1 {
+  font-size: clamp(3.2rem, 8vw, 6.4rem);
+  line-height: 1.08;
+  margin: 0;
 }
 
 .description {
-  max-width: 100%;
-  font-size: 1.8rem;
-  margin: 0 auto 2rem;
-  padding: 0 1.5rem;
-
-  @media (min-width: $breakpoint-small) {
-    max-width: 60%;
-  }
+  color: #43564f;
+  font-size: clamp(1.7rem, 3vw, 2rem);
+  line-height: 1.6;
+  margin: 2.4rem 0 3.2rem;
 }
 
-.actions {
-  a[role='button'] {
-    margin: 0.5rem;
-  }
+.link {
+  align-items: center;
+  background: #035642;
+  border-radius: 0.4rem;
+  color: #fff;
+  display: inline-flex;
+  font-size: 1.7rem;
+  font-weight: 300;
+  gap: 1rem;
+  justify-content: center;
+  min-height: 5.2rem;
+  padding: 1.2rem 2.4rem;
+  text-decoration: none;
+  transition: background-color 150ms ease;
 }
 
-.posts .heading {
-  margin-bottom: 4rem;
+.link:hover {
+  background: #006827;
 }
 
-.testimonials {
-  text-align: center;
-
-  .description {
-    margin-bottom: 6rem;
-  }
+.link:focus-visible {
+  outline: 0.3rem solid #183b32;
+  outline-offset: 0.4rem;
 }
